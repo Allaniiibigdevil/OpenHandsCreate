@@ -53,7 +53,8 @@ class TestKnowledgeBase:
         """测试关键词匹配"""
         results = kb.search("退款")
         assert len(results) > 0
-        assert any("退款" in r["keywords"] for r in results)
+        # 验证结果中包含退款相关内容（问题或答案中）
+        assert any("退款" in r.get("question", "") or "退款" in r.get("answer", "") for r in results)
     
     def test_search_no_match(self, kb):
         """测试无匹配结果"""

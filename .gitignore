@@ -40,6 +40,10 @@ config.yaml
 *.log
 logs/
 
+# Test coverage
+.coverage
+htmlcov/
+
 # OS
 .DS_Store
 Thumbs.db

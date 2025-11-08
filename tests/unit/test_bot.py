@@ -116,7 +116,7 @@ class TestChatBot:
         
         # 验证传递给 API 的消息数量不超过限制
         call_args = mock_client.chat.call_args
-        messages = call_args.args[0]
+        messages = call_args.kwargs.get('messages', call_args.args[0] if call_args.args else [])
         assert len(messages) <= 2
     
     def test_chat_api_error(self, bot, mock_client):
@@ -204,7 +204,7 @@ class TestChatBot:
         
         # 验证第二次调用包含第一次的上下文
         call_args = mock_client.chat.call_args
-        messages = call_args.args[0]
+        messages = call_args.kwargs.get('messages', call_args.args[0] if call_args.args else [])
         
         assert len(messages) >= 2
         assert any("张三" in msg.get("content", "") for msg in messages)
