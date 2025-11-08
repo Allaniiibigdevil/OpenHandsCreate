@@ -10,6 +10,8 @@
 - ✅ **流式输出**: 支持实时流式响应
 - ✅ **配置化管理**: 所有配置独立管理，易于修改
 - ✅ **交互式命令行**: 友好的命令行交互界面
+- ✅ **完整测试覆盖**: 55+ 测试用例，单元测试 + 集成测试
+- ✅ **CI/CD 集成**: GitHub Actions 自动化测试
 
 ## 项目结构
 
@@ -27,11 +29,21 @@ OpenHandsCreate/
 ├── data/
 │   ├── knowledge_base.json   # 知识库数据（需创建）
 │   └── knowledge_base.example.json # 知识库示例
+├── tests/                    # 测试套件
+│   ├── unit/                 # 单元测试
+│   ├── integration/          # 集成测试
+│   ├── fixtures/             # 测试数据
+│   └── conftest.py           # 测试配置
+├── .github/
+│   └── workflows/
+│       └── test.yml          # CI/CD 配置
 ├── logs/                     # 日志目录（自动创建）
 ├── main.py                   # 主程序入口
 ├── config.yaml               # 配置文件（需创建）
 ├── config.example.yaml       # 配置示例
 ├── requirements.txt          # Python 依赖
+├── pytest.ini                # pytest 配置
+├── TEST_REPORT.md            # 测试报告
 └── README.md                 # 本文件
 ```
 
@@ -254,6 +266,41 @@ DeepSeek API 调用失败: ...
 
 **解决**: 复制 `data/knowledge_base.example.json` 为 `data/knowledge_base.json`
 
+## 测试
+
+### 运行测试
+
+项目包含完整的测试套件（55+ 测试用例）：
+
+```bash
+# 使用测试脚本（推荐）
+./run_tests.sh
+
+# 或使用 pytest
+pytest                          # 运行所有测试
+pytest tests/unit -v            # 运行单元测试
+pytest tests/integration -v     # 运行集成测试
+pytest --cov=src --cov-report=html  # 生成覆盖率报告
+```
+
+### 测试覆盖
+
+- ✅ **配置模块**: 10 个测试用例
+- ✅ **知识库模块**: 12 个测试用例
+- ✅ **API 客户端**: 9 个测试用例
+- ✅ **机器人逻辑**: 15 个测试用例
+- ✅ **集成测试**: 9 个测试用例
+
+详细测试报告请查看 [TEST_REPORT.md](TEST_REPORT.md)
+
+### CI/CD
+
+项目配置了 GitHub Actions 自动化测试：
+- 推送到 main/guidebot 分支自动触发
+- 测试 Python 3.9, 3.10, 3.11
+- 自动生成覆盖率报告
+- 代码质量检查（Black, isort, Flake8）
+
 ## 开发计划
 
 - [ ] Web 界面支持
@@ -261,6 +308,8 @@ DeepSeek API 调用失败: ...
 - [ ] 向量数据库集成
 - [ ] 多语言支持
 - [ ] 对话数据分析
+- [x] 完整测试套件
+- [x] CI/CD 集成
 
 ## 许可证
 
@@ -269,3 +318,9 @@ MIT License
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request！
+
+提交代码前请确保：
+1. 所有测试通过: `pytest`
+2. 代码格式正确: `black src tests`
+3. 导入排序正确: `isort src tests`
+4. 无语法错误: `flake8 src tests`

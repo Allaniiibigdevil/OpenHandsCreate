@@ -1,0 +1,21 @@
+# 测试配置文件
+deepseek:
+  api_key: "test-api-key"
+  api_base: "https://api.test.com/v1"
+  model: "test-model"
+  max_tokens: 1000
+  temperature: 0.5
+
+knowledge_base:
+  data_path: "tests/fixtures/test_knowledge_base.json"
+  similarity_threshold: 0.7
+  max_results: 2
+
+conversation:
+  system_prompt: "Test system prompt"
+  max_history: 5
+  enable_knowledge_base: true
+
+logging:
+  level: "DEBUG"
+  file: "tests/logs/test.log"
