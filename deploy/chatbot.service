@@ -1,0 +1,38 @@
+# Systemd 服务配置文件
+# 安装位置: /etc/systemd/system/chatbot.service
+
+[Unit]
+Description=Customer Service ChatBot
+Documentation=https://github.com/Allaniiibigdevil/OpenHandsCreate
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/chatbot
+Environment="PATH=/opt/chatbot/venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+
+# 启动命令
+ExecStart=/opt/chatbot/venv/bin/python /opt/chatbot/main.py
+
+# 重启策略
+Restart=always
+RestartSec=10
+StartLimitInterval=0
+
+# 日志输出
+StandardOutput=append:/opt/chatbot/logs/chatbot.log
+StandardError=append:/opt/chatbot/logs/chatbot.error.log
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+
+# 资源限制
+LimitNOFILE=65536
+MemoryLimit=512M
+
+[Install]
+WantedBy=multi-user.target

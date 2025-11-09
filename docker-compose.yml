@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  chatbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: chatbot:latest
+    container_name: customer-service-bot
+    restart: unless-stopped
+    
+    # 挂载配置和数据
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./data/knowledge_base.json:/app/data/knowledge_base.json:ro
+      - ./logs:/app/logs
+    
+    # 环境变量（可选）
+    environment:
+      - TZ=Asia/Shanghai
+      - PYTHONUNBUFFERED=1
+    
+    # 如果需要 Web 服务，取消注释
+    # ports:
+    #   - "8000:8000"
+    
+    # 资源限制
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # 日志配置
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# 如果需要数据库，可以添加
+# services:
+#   postgres:
+#     image: postgres:15-alpine
+#     environment:
+#       POSTGRES_DB: chatbot
+#       POSTGRES_USER: chatbot
+#       POSTGRES_PASSWORD: password
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     ports:
+#       - "5432:5432"
+#
+# volumes:
+#   postgres_data:
